@@ -1,6 +1,7 @@
 package neotest
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/nspcc-dev/neo-go/pkg/core/transaction"
@@ -48,8 +49,12 @@ func (e *Executor) ValidatorInvoker(h util.Uint160) *ContractInvoker {
 
 // TestInvoke creates test the VM and invokes the method with the args.
 func (c *ContractInvoker) TestInvoke(t testing.TB, method string, args ...interface{}) (*vm.Stack, error) {
+	fmt.Println("TEST INVOKE")
 	tx := c.PrepareInvokeNoSign(t, method, args...)
 	b := c.NewUnsignedBlock(t, tx)
+
+	calculateCoverage(t, c.Chain, tx, b)
+
 	ic := c.Chain.GetTestVM(trigger.Application, tx, b)
 	t.Cleanup(ic.Finalize)
 
