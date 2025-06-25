@@ -532,9 +532,16 @@ func (n *Notary) verifyIncompleteWitnesses(tx *transaction.Transaction, nKeysExp
 		}
 		// Each verification script is allowed to have either one signature or zero signatures. If signature is provided, then need to verify it.
 		if len(w.InvocationScript) != 0 {
-			if len(w.InvocationScript) != 66 || !bytes.HasPrefix(w.InvocationScript, []byte{byte(opcode.PUSHDATA1), keys.SignatureLen}) {
-				return nil, fmt.Errorf("witness #%d: invocation script should have length = 66 and be of the form [PUSHDATA1, 64, signatureBytes...]", i)
+			if len(w.InvocationScript) != 66 {
+				return nil, fmt.Errorf("witness #%d: invocation script should have length = 66 but has %d", i, len(w.InvocationScript))
 			}
+			if !bytes.HasPrefix(w.InvocationScript, []byte{byte(opcode.PUSHDATA1), keys.SignatureLen}) {
+				return nil, fmt.Errorf("witness #%d: invocation script should be of the form [PUSHDATA1, 64, signatureBytes...] but first opcode is 0x%02x, second is %d", i, w.InvocationScript[0], w.InvocationScript[1])
+			}
+
+			//if len(w.InvocationScript) != 66 || !bytes.HasPrefix(w.InvocationScript, []byte{byte(opcode.PUSHDATA1), keys.SignatureLen}) {
+			//	return nil, fmt.Errorf("witness #%d: invocation script should have length = 66 and be of the form [PUSHDATA1, 64, signatureBytes...]", i)
+			//}
 		}
 		if nSigs, pubsBytes, ok := vm.ParseMultiSigContract(w.VerificationScript); ok {
 			result[i] = witnessInfo{
