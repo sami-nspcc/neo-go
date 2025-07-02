@@ -2758,6 +2758,9 @@ func (s *Server) submitNotaryRequest(ps params.Params) (any, *neorpc.Error) {
 	if err != nil {
 		return nil, neorpc.NewInvalidParamsError(fmt.Sprintf("can't decode notary payload: %s", err))
 	}
+	s.log.Debug("DEBUG: get NR as RPC server",
+		zap.String("main hash", r.MainTransaction.Hash().StringLE()),
+		zap.Int("len witness[1].Invocation", len(r.MainTransaction.Scripts[1].InvocationScript)))
 	return getRelayResult(s.coreServer.RelayP2PNotaryRequest(r), r.FallbackTransaction.Hash())
 }
 

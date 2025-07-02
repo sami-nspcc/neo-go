@@ -189,6 +189,10 @@ mainloop:
 			if req, ok := event.Data.(*payload.P2PNotaryRequest); ok {
 				switch event.Type {
 				case mempoolevent.TransactionAdded:
+					n.Config.Log.Debug("DEBUG: get NR in notary svc",
+						zap.String("main hash", req.MainTransaction.Hash().String()),
+						zap.Int("length Scripts[1].InvocationScript", len(req.MainTransaction.Scripts[1].InvocationScript)))
+
 					n.OnNewRequest(req)
 				case mempoolevent.TransactionRemoved:
 					n.OnRequestRemoval(req)

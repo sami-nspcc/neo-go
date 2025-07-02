@@ -1358,6 +1358,9 @@ func (s *Server) handleP2PNotaryRequestCmd(r *payload.P2PNotaryRequest) error {
 	if !s.chain.P2PSigExtensionsEnabled() {
 		return errors.New("P2PNotaryRequestCMD was received, but P2PSignatureExtensions are disabled")
 	}
+	s.log.Debug("DEBUG: get NR as P2P server",
+		zap.String("main hash", r.MainTransaction.Hash().StringLE()),
+		zap.Int("len witness[1].Invocation", len(r.MainTransaction.Scripts[1].InvocationScript)))
 	// It's OK for it to fail for various reasons like request already existing
 	// in the pool.
 	err := s.RelayP2PNotaryRequest(r)
