@@ -69,9 +69,8 @@ eventloop:
 	// ctx is cancelled, server is notified and will finish soon.
 drainloop:
 	for {
-		select {
-		case <-c.events:
-		default:
+		_, ok := <-c.events
+		if !ok {
 			break drainloop
 		}
 	}
