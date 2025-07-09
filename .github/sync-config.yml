@@ -5,7 +5,6 @@ gitlab:
   sync:
     issues:
       syncComments: true
-      labels: ['synced']
 
 # GitLab -> GitHub sync
 github:
