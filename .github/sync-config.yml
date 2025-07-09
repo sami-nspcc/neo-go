@@ -1,0 +1,12 @@
+# GitHub -> GitLab sync
+gitlab:
+  enabled: true
+  host: 'git.nspcc.io'
+  sync:
+    issues:
+      syncComments: true
+      labels: ['synced']
+
+# GitLab -> GitHub sync
+github:
+  enabled: false
